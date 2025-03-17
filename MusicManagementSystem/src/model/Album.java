@@ -2,6 +2,7 @@
  * Author: Lanyue Zhang
  * This class represents an album with the detailed information of the album and
  * corresponding operations
+ * 1sttry to use
  */
 package model;
 
