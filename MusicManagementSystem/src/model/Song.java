@@ -5,8 +5,6 @@
 package model;
 
 import java.util.Objects;
-
-
 public class Song {
 
     private String title;
@@ -15,7 +13,7 @@ public class Song {
     private int rating;
     private int playCount;
 
-    /**
+    /*
      * Default constructor
      * @param title input title
      * @param artist input artist
@@ -29,64 +27,59 @@ public class Song {
         this.playCount = 0;
     }
 
-    /**
-     * Get the song title
-     * @return song title
+    /*
+     * get the song title
      */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Get the song artist
-     * @return
+    /*
+     * get the song artist
      */
     public String getArtist() {
         return artist;
     }
 
-    /**
-     * Get the song album
-     * @return song album
+    /*
+     *get the song album
      */
     public String getAlbum() {
         return album;
     }
 
-    /**
-     * Get the song rating
-     * @return song rating between 1 and 5
+    /*
+     *get the song rating
      */
     public int getRating() {
         return rating;
     }
     
-    /**
-     * Get the playCount
-     * @return playCount
+    /*
+     * get the playCount
      */
     public int getPlayCount() {
         return playCount;
     }
 
-    /**
-     * Increase play times
+    /*
+     * increase play times
      */
     public void incrementPlayCount() {
         this.playCount++;
     }
 
-    /**
-     * Set the rating of the song
+    /*
+     * set the rating of the song
      * @param rating input rating
      */
     public void setRating(int rating) {
         this.rating = rating;
     }
 
-    /**
-     * Check if two songs equal to each other
-     * @param o another song object
+    /*
+     * check if two songs equal to each other
+     * @param o
      * @return true if equal, else false
      */
     public boolean equals(Object o) {
@@ -98,9 +91,8 @@ public class Song {
                 Objects.equals(album, song.album);
     }
 
-    /**
-     * Get the string of the song object
-     * @return string of the song object
+    /*
+     * get the string of the song object
      */
     public String toString() {
         return String.format("%-50s%-50s%s", title, artist, album);
