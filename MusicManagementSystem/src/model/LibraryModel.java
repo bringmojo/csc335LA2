@@ -1,5 +1,5 @@
 /**
- * Author: Jifei Wang
+ * Author: Jifei Wang, Lanyue Zhang(LA2 adds some code)
  * This is the class shows the user library
  * which contains multiple playlist and corresponding operations
  * on the library
@@ -292,4 +292,13 @@ public class LibraryModel {
         }
         return true;
     }
+    
+    /*
+     * Play the song and update the number of plays
+     * @param song 
+     */
+    public void playSong(Song song) {
+        song.incrementPlayCount();
+    }
+    
 }
