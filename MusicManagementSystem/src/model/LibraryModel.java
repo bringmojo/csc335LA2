@@ -16,14 +16,75 @@ public class LibraryModel {
     // list of favorite songs
     private List<Song> favorites;
     private List<Song> library;
-
+    
+    //Store the last 10 songs played
+    private List<Song>recentPlayed = new LinkedList<>();
+    //store play count
+    private Map<Song, Integer> playCounts = new HashMap<>();
+    private static final int recentPlayLimit = 10;
+    
     /**
-     * Default constructor
+     * constructor
      */
     public LibraryModel() {
         playLists = new ArrayList<PlayList>();
         favorites = new ArrayList<>();
         library = new ArrayList<>();
+    }
+
+    /*
+     *get the 10 most recently played songs
+     * @return list of recentPlayed
+     */
+    public List<Song>getRecentPayedSongs(){
+        return new ArrayList<>(recentPlayed);
+    }
+
+    /*
+    * get the top 10 most played songs
+    * @return list of 10 songs
+    */
+    public List<Song> getTopPlayedSongs() {
+        //a list to store the sorted songs
+        List<Map.Entry<Song, Integer>> sortedList = new ArrayList<>(playCounts.entrySet());
+        //decending sort
+        sortedList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+        List<Song> topPlayedSongs = new ArrayList<>();
+        //find the top 10 most played songs
+        for (int i = 0; i < Math.min(10, sortedList.size()); i++) {
+            topPlayedSongs.add(sortedList.get(i).getKey());
+        }
+        return topPlayedSongs;
+    }
+
+    @Override
+    //Implement random play
+    public Iterator<Song> iterator() {
+        List<Song> newList = new ArrayList<>(library);
+        Collections.newList(newList);
+        return newList.iterator;
+    }
+
+   /*
+    * play the specified song and update the playback data.
+    * @param title
+    * @param artist
+    */
+    public void playSong(String title, String artist){
+        for (Song song:library){  
+            if (song.getTitle().equals(title)&&song.getArtist().equals(artist)){      
+                song.incrementPlayCount();
+                playCounts.put(song, song.getPlayCount());
+                //update recent list
+                recentPlayed.remove(song);
+                recentPlayed.add(0, song);
+                if (recentPlayed.size() > recentPlayLimit) {
+                    recentPlayed.remove(recentPlayLimit);
+                }
+            return;
+            }
+        }
+        System.out.println("Song not found");
     }
 
     /**
