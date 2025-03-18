@@ -13,6 +13,7 @@ public class Song {
     private String artist;
     private String album;
     private int rating;
+    private int playCount;
 
     /**
      * Default constructor
@@ -25,6 +26,7 @@ public class Song {
         this.artist = artist;
         this.album = album;
         this.rating = 0;
+        this.playCount = 0;
     }
 
     /**
@@ -57,6 +59,21 @@ public class Song {
      */
     public int getRating() {
         return rating;
+    }
+    
+    /**
+     * Get the playCount
+     * @return playCount
+     */
+    public int getPlayCount() {
+        return playCount;
+    }
+
+    /**
+     * Increase play times
+     */
+    public void incrementPlayCount() {
+        this.playCount++;
     }
 
     /**
