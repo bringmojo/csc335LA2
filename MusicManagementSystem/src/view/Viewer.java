@@ -1,25 +1,140 @@
 /*
- * Author: Jifei Wang
+ * Author: Jifei Wang, Lanyue Zhang(LA2 change)
  * This is the main viewer class for the overall program
  */
 package view;
 
 import model.*;
-
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Viewer {
-
-    /**
-     * Default constructor
+    private final Scanner scanner =new Scanner(System.in);
+    
+    /*
+     * constructor
      */
-    public Viewer() {
+    public Viewer(){}
 
+    /*
+     * Run the main menu loop for user interaction with the music library.
+     * Users can select different options to manage and play music.
+     * @param store, which contain available songs and albums.
+     * @param library, which manage song data and playback history.
+     */
+    public void run(MusicStore store, LibraryModel library) {
+        while (true) {
+            System.out.println("""
+                \n--- Music Library Menu ---
+                1. Play a song
+                2. Show recent played songs
+                3. Show top played songs
+                4. Sort songs
+                5. Delete song/album
+                6. Shuffle play
+                7. Exit
+                Choose an option:
+                """);
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1" -> playSong(library);
+                case "2" -> listRecentPlayed(library);
+                case "3" -> listTopPlayed(library);
+                case "4" -> sortSongs(library);
+                case "5" -> deleteMusic(library);
+                case "6" -> shufflePlay(library);
+                case "7" -> {
+                    System.out.println("Exit!");
+                    return;
+                }
+                default -> System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+     /*
+     * Allows the user to play a song by entering the title and artist.
+     * The song is then played and recorded in the playback history.
+     * @param library
+     */
+    private void playSong(LibraryModel library){
+        System.out.println("Please enter song title: ");
+        String songTitle= scanner.nextLine();
+        System.out.println("Please enter artist: ");
+        String artist= scanner.nextLine();
+        library.playSong(songTitle, artist);
+    }
+    
+    /*
+     * Displays a list of recently played songs from the library.
+     * @param library
+     */
+    private void listRecentPlayed(LibraryModel library){
+        System.out.println("\n--- Recent Played Songs ---");
+        library.getRecentPlayedSongs().forEach(System.out::println);
+    }
+    
+    /*
+     * display a list of top-played songs based on play counts.
+     * @param library
+     */
+    private voidnlistTopPlayed(LibraryModel library){
+        System.out.println("\n--- Top Played Songs ---");
+        library.getTopPlayedSongs().forEach(System.out::println);
+    }
+    
+    /*
+     * Allows the user to sort songs by title, artist, or rating and displays the sorted list.
+     * @param library
+     */
+    private void sortSongs(LibraryModel library){
+        System.out.println("Sort by: 1. Title;  2. Artist;  3. Rating.");
+        String choice = scanner.nextLine();
+        List<Song> sortedSongs = switch (choice) {
+            case "1" -> library.getSongsSortedByTitle();
+            case "2" -> library.getSongsSortedByArtist();
+            case "3" -> library.getSongsSortedByRating();
+            default -> {
+                System.out.println("Invalid choice, return to menu.");
+                yield List.of();
+            }
+        };
+        sortedSongs.forEach(System.out::println);
+    }
+    
+    /*
+     * Allows the user to delete either a specific song or an entire album.
+     * @param library
+     */
+    private void deleteMusic(LibraryModel library){
+        System.out.print("Delete: 1. Song  2. Album\nChoose: ");
+        String choice = scanner.nextLine();
+        if (choice.equals("1")){
+            System.out.print("Enter song title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter artist: ");
+            String artist = scanner.nextLine();
+            library.deleteSong(title, artist);
+        } else if (choice.equals("2")){
+            System.out.print("Enter album name: ");
+            String album = scanner.nextLine();
+            library.deleteAlbum(album);
+        } else {
+            System.out.println("Invalid choice.");
+        }
     }
 
-    /**
+    /*
+     * play all songs in the library in a shuffled order.
+     * @param library
+     */
+    private void shufflePlay(LibraryModel library){  
+        System.out.println("\n--- Shuffle Play ---");
+        for(Song song: library){
+            System.out.println("Playing: " + song);
+        }
+    }
+
+    /*
      * Main menu for program
      */
     public void mainMenu() {
