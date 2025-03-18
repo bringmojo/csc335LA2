@@ -1,6 +1,6 @@
 
 /*
- * Author: Jifei Wang, Lanyue Zhang(LA2 part change)
+ * Author: Jifei Wang
  */
 import model.LibraryModel;
 import model.MusicStore;
