@@ -292,13 +292,6 @@ public class LibraryModel {
         }
         return true;
     }
-    
-    /*
-     * Play the song and update the number of plays
-     * @param song 
-     */
-    public void playSong(Song song) {
-        song.incrementPlayCount();
-    }
+
     
 }
