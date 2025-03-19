@@ -140,13 +140,15 @@ public class Viewer {
      * The song is then played and recorded in the playback history.
      * @param library
      */
-    private void playSong(LibraryModel library){
-        System.out.println("Please enter song title: ");
-        String songTitle= scanner.nextLine();
-        System.out.println("Please enter artist: ");
-        String artist= scanner.nextLine();
-        library.playSong(songTitle, artist);
+    private void playSong(LibraryModel library) {
+        System.out.println("Enter song title:");
+        String title = scanner.nextLine();
+    
+        System.out.println("Enter artist name:");
+        String artist = scanner.nextLine();
+        library.playSong(title, artist);
     }
+    
     
     /*
      * Displays a list of recently played songs from the library.
@@ -154,7 +156,7 @@ public class Viewer {
      */
     private void listRecentPlayed(LibraryModel library){
         System.out.println("\n--- Recent Played Songs ---");
-        library.getRecentPalyedSongs().forEach(System.out::println);
+        library.getRecentPlayedSongs().forEach(System.out::println);
     }
     
     /*
@@ -603,6 +605,7 @@ public class Viewer {
             System.out.println("Error: Library is empty");
             return;
         }
+
         System.out.printf(String.format("%-5s%-50s%-50s%s\n", " ", "Song title", "Song artist", "Song " +
                 "album"));
         for (int i = 0; i < songs.size(); i++) {
@@ -611,6 +614,7 @@ public class Viewer {
         int option = getUserInputOption(0, songs.size() - 1);
         Song song = songs.get(option);
         Scanner scanner = new Scanner(System.in);
+
         int score = 0;
         while (true) {
             System.out.printf("Please input the score [1 - 5]: ");
@@ -635,6 +639,7 @@ public class Viewer {
             System.out.println("Error: Library is empty");
             return;
         }
+
         System.out.printf(String.format("%-5s%-50s%-50s%s\n", " ", "Song title", "Song artist", "Song " +
                 "album"));
         for (int i = 0; i < songs.size(); i++) {
@@ -649,4 +654,5 @@ public class Viewer {
             System.out.println("Error: Song added to favorite failed.");
         }
     }
+
 }
