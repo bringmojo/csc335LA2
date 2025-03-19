@@ -7,7 +7,14 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class LibraryModel {
@@ -16,9 +23,9 @@ public class LibraryModel {
     // list of favorite songs
     private List<Song> favorites;
     private List<Song> library;
-    
+
     //Store the last 10 songs played
-    private List<Song>recentPlayed = new LinkedList<>();
+    private final List<Song>recentPlayed = new LinkedList<>();
     //store play count
     private Map<Song, Integer> playCounts = new HashMap<>();
     private static final int recentPlayLimit = 10;
@@ -31,12 +38,32 @@ public class LibraryModel {
         favorites = new ArrayList<>();
         library = new ArrayList<>();
     }
+    
+    // sorted by titile
+    public List<Song> getSongsSortedByTitle() {
+        return library.stream()
+                .sorted(Comparator.comparing(Song::getTitle))
+                .collect(Collectors.toList());
+    }
 
+    // sorted by artist
+    public List<Song> getSongsSortedByArtist() {
+        return library.stream()
+                .sorted(Comparator.comparing(Song::getArtist))
+                .collect(Collectors.toList());
+    }
+
+    // sorted by rating
+    public List<Song> getSongsSortedByRating() {
+        return library.stream()
+                .sorted(Comparator.comparing(Song::getRating).reversed()) // 按评分降序排列
+                .collect(Collectors.toList());
+    }
     /*
      *get the 10 most recently played songs
      * @return list of recentPlayed
      */
-    public List<Song>getRecentPayedSongs(){
+    public List<Song>getRecentPalyedSongs(){
         return new ArrayList<>(recentPlayed);
     }
 
@@ -57,13 +84,13 @@ public class LibraryModel {
         return topPlayedSongs;
     }
 
-    @Override
-    //Implement random play
+    // Implement random play
     public Iterator<Song> iterator() {
         List<Song> newList = new ArrayList<>(library);
-        Collections.newList(newList);
-        return newList.iterator;
+        Collections.shuffle(newList);
+        return newList.iterator();
     }
+
 
    /*
     * play the specified song and update the playback data.
@@ -106,6 +133,7 @@ public class LibraryModel {
     public List<Song> getLibrary() {
         return library;
     }
+    
 
     /**
      * Search specified songs by song title
@@ -257,6 +285,39 @@ public class LibraryModel {
         return true;
     }
 
+        // delete single song
+    public boolean deleteSong(String title, String artist) {
+        // Find matching songs
+        boolean removed = library.removeIf(song -> 
+            song.getTitle().equalsIgnoreCase(title) && song.getArtist().equalsIgnoreCase(artist));
+
+        if (removed) {
+            System.out.println("Song '" + title + "' by " + artist + " has been deleted.");
+        } else {
+            System.out.println("Error: Song not found.");
+        }
+
+        return removed;
+    }
+
+    // delete all album
+    public boolean deleteAlbum(String albumTitle) {
+        // check if the album exists
+        boolean found = library.stream().anyMatch(song -> song.getAlbum().equalsIgnoreCase(albumTitle));
+    
+        if (!found) {
+            System.out.println("Error: Album not found.");
+            return false;
+        }
+
+        // Remove all songs that belong to this album
+        library.removeIf(song -> song.getAlbum().equalsIgnoreCase(albumTitle));
+
+        System.out.println("Album '" + albumTitle + "' and all its songs have been deleted.");
+        return true;
+    }
+
+
     /**
      * Add song to the library
      * @param song input song object
@@ -355,4 +416,5 @@ public class LibraryModel {
     }
 
     
+}
 }
