@@ -25,7 +25,7 @@ public class LibraryModel {
     private List<Song> library;
 
     //Store the last 10 songs played
-    private final List<Song>recentPlayed = new LinkedList<>();
+    private LinkedList<Song> recentPlayedSongs = new LinkedList<>();
     //store play count
     private Map<Song, Integer> playCounts = new HashMap<>();
     private static final int recentPlayLimit = 10;
@@ -59,13 +59,15 @@ public class LibraryModel {
                 .sorted(Comparator.comparing(Song::getRating).reversed()) // 按评分降序排列
                 .collect(Collectors.toList());
     }
+
     /*
      *get the 10 most recently played songs
      * @return list of recentPlayed
      */
-    public List<Song>getRecentPalyedSongs(){
-        return new ArrayList<>(recentPlayed);
+    public List<Song> getRecentPlayedSongs() {
+        return new ArrayList<>(recentPlayedSongs);
     }
+    
 
     /*
     * get the top 10 most played songs
@@ -103,10 +105,10 @@ public class LibraryModel {
                 song.incrementPlayCount();
                 playCounts.put(song, song.getPlayCount());
                 //update recent list
-                recentPlayed.remove(song);
-                recentPlayed.add(0, song);
-                if (recentPlayed.size() > recentPlayLimit) {
-                    recentPlayed.remove(recentPlayLimit);
+                recentPlayedSongs.remove(song);
+                recentPlayedSongs.add(0, song);
+                if (recentPlayedSongs.size() > recentPlayLimit) {
+                    recentPlayedSongs.remove(recentPlayLimit);
                 }
             return;
             }
@@ -415,4 +417,5 @@ public class LibraryModel {
         return true;
     }
 
+    
 }
