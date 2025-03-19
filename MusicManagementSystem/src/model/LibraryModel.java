@@ -415,6 +415,4 @@ public class LibraryModel {
         return true;
     }
 
-    
-}
 }
