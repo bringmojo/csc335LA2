@@ -4,28 +4,115 @@
  */
 package view;
 
-import model.*;
 import java.util.List;
 import java.util.Scanner;
+import model.*;
 
 public class Viewer {
-    private final Scanner scanner =new Scanner(System.in);
-    
-    /*
-     * constructor
-     */
-    public Viewer(){}
+    private final Scanner scanner;
 
-    /*
-     * Run the main menu loop for user interaction with the music library.
-     * Users can select different options to manage and play music.
-     * @param store, which contain available songs and albums.
-     * @param library, which manage song data and playback history.
-     */
-    public void run(MusicStore store, LibraryModel library) {
+    public Viewer() {
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void run(MusicStore musicStore, LibraryModel library) {
         while (true) {
             System.out.println("""
-                \n--- Music Library Menu ---
+                \n--- Main Menu ---
+                1. Music Store
+                2. User Library
+                3. Music Playback & Management
+                4. Exit
+                Choose an option:
+                """);
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1" -> runMusicStore(musicStore);
+                case "2" -> runUserLibrary(musicStore, library);
+                case "3" -> runMusicPlayback(library);
+                case "4" -> {
+                    System.out.println("Exiting... Goodbye!");
+                    return;
+                }
+                default -> System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+
+    private void runMusicStore(MusicStore musicStore) {
+        while (true) {
+            System.out.println("""
+                \n--- Music Store Menu ---
+                1. Search Song by Title
+                2. Search Song by Artist
+                3. Search Album by Title
+                4. Search Album by Artist
+                5. Exit
+                Choose an option:
+                """);
+            String storeChoice = scanner.nextLine();
+            if (storeChoice.equals("5")) break;
+            switch (storeChoice) {
+                case "1" -> searchStoreSongByTitle(musicStore);
+                case "2" -> searchStoreSongByArtist(musicStore);
+                case "3" -> searchStoreAlbumByTitle(musicStore);
+                case "4" -> searchStoreAlbumByArtist(musicStore);
+                default -> System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+
+    private void runUserLibrary(MusicStore musicStore, LibraryModel library) {
+        while (true) {
+            System.out.println("""
+                \n--- User Library Menu ---
+                1. Find Song by Title
+                2. Find Song by Artist
+                3. Find Album by Title
+                4. Find Album by Artist
+                5. Add Song to Library
+                6. Add Album to Library
+                7. Create Playlist
+                8. Add Song to Playlist
+                9. Remove Song from Playlist
+                10. List All Songs
+                11. List All Artists
+                12. List All Albums
+                13. List All Playlists
+                14. List Favorite Songs
+                15. Rate a Song
+                16. Mark Song as Favorite
+                0. Exit
+                Choose an option:
+                """);
+            String libraryChoice = scanner.nextLine();
+            if (libraryChoice.equals("0")) break;
+            switch (libraryChoice) {
+                case "1" -> findSongByTitleInUserLibrary(library);
+                case "2" -> findSongByArtistInUserLibrary(library);
+                case "3" -> findAlbumByTitleInUserLibrary(musicStore, library);
+                case "4" -> findAlbumByArtistInUserLibrary(musicStore, library);
+                case "5" -> addSongToLibrary(musicStore, library);
+                case "6" -> addAlbumToLibrary(musicStore, library);
+                case "7" -> createPlayList(library);
+                case "8" -> addSongToPlayList(musicStore, library);
+                case "9" -> removeSongFromPlayList(library);
+                case "10" -> listAllSongInLibrary(library);
+                case "11" -> listAllArtistInLibrary(library);
+                case "12" -> listAllAlbumInLibrary(library);
+                case "13" -> listAllPlayListInLibrary(library);
+                case "14" -> listAllFavoriteSongInLibrary(library);
+                case "15" -> rateSong(library);
+                case "16" -> markSongAsFavorite(library);
+                default -> System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+
+    private void runMusicPlayback(LibraryModel library) {
+        while (true) {
+            System.out.println("""
+                \n--- Music Playback & Management Menu ---
                 1. Play a song
                 2. Show recent played songs
                 3. Show top played songs
@@ -35,18 +122,15 @@ public class Viewer {
                 7. Exit
                 Choose an option:
                 """);
-            String choice = scanner.nextLine();
-            switch (choice) {
+            String playbackChoice = scanner.nextLine();
+            if (playbackChoice.equals("7")) break;
+            switch (playbackChoice) {
                 case "1" -> playSong(library);
                 case "2" -> listRecentPlayed(library);
                 case "3" -> listTopPlayed(library);
                 case "4" -> sortSongs(library);
                 case "5" -> deleteMusic(library);
                 case "6" -> shufflePlay(library);
-                case "7" -> {
-                    System.out.println("Exit!");
-                    return;
-                }
                 default -> System.out.println("Invalid choice, try again.");
             }
         }
@@ -70,14 +154,14 @@ public class Viewer {
      */
     private void listRecentPlayed(LibraryModel library){
         System.out.println("\n--- Recent Played Songs ---");
-        library.getRecentPlayedSongs().forEach(System.out::println);
+        library.getRecentPalyedSongs().forEach(System.out::println);
     }
     
     /*
      * display a list of top-played songs based on play counts.
      * @param library
      */
-    private voidnlistTopPlayed(LibraryModel library){
+    private void listTopPlayed(LibraryModel library){
         System.out.println("\n--- Top Played Songs ---");
         library.getTopPlayedSongs().forEach(System.out::println);
     }
@@ -129,7 +213,7 @@ public class Viewer {
      */
     private void shufflePlay(LibraryModel library){  
         System.out.println("\n--- Shuffle Play ---");
-        for(Song song: library){
+        for(Song song: library.getLibrary()){
             System.out.println("Playing: " + song);
         }
     }
@@ -170,21 +254,6 @@ public class Viewer {
         }
     }
 
-    /**
-     * Music store menu
-     */
-    private void musicStoreMenu() {
-        System.out.println();
-        System.out.println("***************************************************");
-        System.out.println("     Music Store                                   ");
-        System.out.println("  1. Find Song by Title                            ");
-        System.out.println("  2. Find Song by Artist                           ");
-        System.out.println("  3. Find Album by Title                           ");
-        System.out.println("  4. Find Album by Artist                          ");
-        System.out.println("  5. Exit                                          ");
-        System.out.println("***************************************************");
-        System.out.println();
-    }
 
     /**
      * Display list of songs
@@ -268,65 +337,6 @@ public class Viewer {
         }
         System.out.println();
     }
-
-    /**
-     * Music store run function
-     */
-    private void musicStoreRun(MusicStore musicStore) {
-        boolean running = true;
-        int option = 0;
-        while (running) {
-            musicStoreMenu();
-            option = getUserInputOption(1, 5);
-            switch (option) {
-                case 1:
-                    searchStoreSongByTitle(musicStore);
-                    break;
-                case 2:
-                    searchStoreSongByArtist(musicStore);
-                    break;
-                case 3:
-                    searchStoreAlbumByTitle(musicStore);
-                    break;
-                case 4:
-                    searchStoreAlbumByArtist(musicStore);
-                    break;
-                case 5:
-                    running = false;
-                    break;
-            }
-        }
-    }
-
-    /**
-     * user library menu
-     */
-    private void userLibraryMenu() {
-        System.out.println();
-        System.out.println("***************************************************");
-        System.out.println("     User Library                                  ");
-        System.out.println("  1. Find Song in User Library by Title            ");
-        System.out.println("  2. Find Song in User Library by Artist           ");
-        System.out.println("  3. Find Album in User Library by Title           ");
-        System.out.println("  4. Find Album in User Library by Artist          ");
-        System.out.println("  5. Add Song To Library                           ");
-        System.out.println("  6. Add Album to Library                          ");
-        System.out.println("  7. Create a PlayList                             ");
-        System.out.println("  8. Add Song to PlayList                          ");
-        System.out.println("  9. Remove Song from PlayList                     ");
-        System.out.println("  10. List all Songs in library                    ");
-        System.out.println("  11. List all Artists in library                  ");
-        System.out.println("  12. List all Albums in library                   ");
-        System.out.println("  13. List all PlayList in library                 ");
-        System.out.println("  14. List all Favorite songs in library           ");
-        System.out.println("  15. Rating Song                                  ");
-        System.out.println("  16. Mark Song as Favorite                        ");
-        System.out.println("  0.  Exit                                         ");
-        System.out.println("***************************************************");
-        System.out.println();
-    }
-
-
 
     /**
      * List all play list in the user library
@@ -593,7 +603,6 @@ public class Viewer {
             System.out.println("Error: Library is empty");
             return;
         }
-
         System.out.printf(String.format("%-5s%-50s%-50s%s\n", " ", "Song title", "Song artist", "Song " +
                 "album"));
         for (int i = 0; i < songs.size(); i++) {
@@ -602,7 +611,6 @@ public class Viewer {
         int option = getUserInputOption(0, songs.size() - 1);
         Song song = songs.get(option);
         Scanner scanner = new Scanner(System.in);
-
         int score = 0;
         while (true) {
             System.out.printf("Please input the score [1 - 5]: ");
@@ -627,7 +635,6 @@ public class Viewer {
             System.out.println("Error: Library is empty");
             return;
         }
-
         System.out.printf(String.format("%-5s%-50s%-50s%s\n", " ", "Song title", "Song artist", "Song " +
                 "album"));
         for (int i = 0; i < songs.size(); i++) {
@@ -640,98 +647,6 @@ public class Viewer {
         }
         else {
             System.out.println("Error: Song added to favorite failed.");
-        }
-    }
-
-    /**
-     * This is the user library operations function
-     * @param musicStore input music store
-     * @param library input library
-     */
-    private void userLibraryRun(MusicStore musicStore, LibraryModel library) {
-        boolean running = true;
-        int option = 0;
-        while (running) {
-            userLibraryMenu();
-            option = getUserInputOption(0, 16);
-            switch (option) {
-                case 0:
-                    running = false;
-                    break;
-                case 1:
-                    findSongByTitleInUserLibrary(library);
-                    break;
-                case 2:
-                    findSongByArtistInUserLibrary(library);
-                    break;
-                case 3:
-                    findAlbumByTitleInUserLibrary(musicStore, library);
-                    break;
-                case 4:
-                    findAlbumByArtistInUserLibrary(musicStore, library);
-                    break;
-                case 5:
-                    addSongToLibrary(musicStore, library);
-                    break;
-                case 6:
-                    addAlbumToLibrary(musicStore, library);
-                    break;
-                case 7:
-                    createPlayList(library);
-                    break;
-                case 8:
-                    addSongToPlayList(musicStore, library);
-                    break;
-                case 9:
-                    removeSongFromPlayList(library);
-                    break;
-                case 10:
-                    listAllSongInLibrary(library);
-                    break;
-                case 11:
-                    listAllArtistInLibrary(library);
-                    break;
-                case 12:
-                    listAllAlbumInLibrary(library);
-                    break;
-                case 13:
-                    listAllPlayListInLibrary(library);
-                    break;
-                case 14:
-                    listAllFavoriteSongInLibrary(library);
-                    break;
-                case 15:
-                    rateSong(library);
-                    break;
-                case 16:
-                    markSongAsFavorite(library);
-                    break;
-            }
-        }
-    }
-
-
-    /**
-     * main entrance of the program
-     */
-    public void run(MusicStore musicStore, LibraryModel library) {
-        boolean running = true;
-        int option = 0;
-        while (running) {
-            mainMenu();
-            option = getUserInputOption(1, 3);
-            switch (option) {
-                case 1:
-                    musicStoreRun(musicStore);
-                    break;
-                case 2:
-                    userLibraryRun(musicStore, library);
-                    break;
-                case 3:
-                    running = false;
-                    System.out.println("Byebye...");
-                    break;
-            }
         }
     }
 }
