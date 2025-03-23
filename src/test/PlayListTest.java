@@ -1,15 +1,5 @@
-
-/*
- * Author: Lanyue Zhang
- * The PlayListTest file tests the functionality of the PlayList class. 
- *  It ensures that a playlist can be created, songs can be added to the playlist, 
- *  duplicate songs are not added, and songs can be removed.
- *  It also checks if the playlist contains specific songs 
- *  and that the size of the playlist changes accordingly 
- *  as songs are added or removed.
- * 
- */
 package test;
+
 import model.PlayList;
 import model.Song;
 import org.junit.Test;
