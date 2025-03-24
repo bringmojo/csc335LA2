@@ -13,7 +13,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
+/*
+ * Jifei Wang
  * Manager class for user authentication and user data
  */
 public class UserManager {
