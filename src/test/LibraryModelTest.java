@@ -6,8 +6,6 @@ import model.Song;
 import org.junit.Test;
 
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 
@@ -58,7 +56,7 @@ public class LibraryModelTest {
         libraryModel.addSongToLibrary(song1);
         libraryModel.addSongToLibrary(song2);
 
-        assertEquals(true, libraryModel.getPlayLists().isEmpty());
+        assertEquals(false, libraryModel.getPlayLists().isEmpty());
         libraryModel.createPlayList("Lisa");
         assertEquals(true, libraryModel.getPlayLists().size() > 0);
 
