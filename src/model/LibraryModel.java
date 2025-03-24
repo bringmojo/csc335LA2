@@ -3,7 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.*;
 
-/**
+/*
+ * Author: Jifei Wang, Lanyue Zhang(changed part)
  * This is the class shows the user library
  * which contains multiple playlist and corresponding operations
  * on the library
