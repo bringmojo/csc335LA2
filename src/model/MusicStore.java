@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
+ * Author: Jifei Wang
  * This class would load the song data from the specified file
  */
 public class MusicStore {
