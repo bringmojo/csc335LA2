@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+* Author: Lanyue Zhang, Jifei Wang
  * This class represents an album with the detailed information of the album and
  * corresponding operations
  */
